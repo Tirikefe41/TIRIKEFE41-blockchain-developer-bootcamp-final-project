@@ -1,4 +1,4 @@
-# DAZA: Decentralized Afro Zoned Accounts.
+# DAZA: Decentralized Afro Zoned Addresses.
 
 ## DAZA is uses an innovative ramp to empowers users through the gains that emanate from Token staking and P2P Dex swapping.
 
