@@ -1,8 +1,7 @@
-# EMERGING MARKETS INVESTMENT CHANNEL (EMIC)
+# DAZA: Decentralized Afro Zoned Accounts.
 
-## EMIC is a platform that uses Smart Contracts to Transparently provide Investors with Investment Channels.
+## DAZA is uses an innovative ramp to empowers users through the gains that emanate from Token staking and P2P Dex swapping.
 
-### The interface between Investors and Opportunities are Smart Contracts living on the blockchain.
+### Faced with the Legislative challenge of taking advantage of the current blockchain revolution through the use of Cryptocurrencies...
 
-### Product 1 is focused on Social Trading where Traders openly show their Trading Productivity. 
-### More like myfxbook for crypto Traders
+### Project context incorporates a Dex and Liquidity pool access for token users. 
