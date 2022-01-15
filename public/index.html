@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MVP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+
+  <script src="https://kit.fontawesome.com/1532adbf73.js" crossorigin="anonymous"></script>
+</head>
+<style>
+  /* body {
+      width: 100%;
+      margin: 0;
+      font-weight: 400;
+
+      @media screen and (min-width: 320px) {
+        font-size: 0.92em;
+      }
+
+      @media screen and (min-width: 360px) {
+        font-size: 0.96em;
+      }
+
+      @media screen and (min-width: 400px) {
+        font-size: 1em;
+      }
+    } */
+  .bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+
+  select {
+    font-family: "FontAwesome", "Second Font name";
+  }
+
+  @media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+      font-size: 3.5rem;
+    }
+  }
+</style>
+
+<body>
+  <div class="container text-center">
+    <h1 class="my-3">Balance AutoScanner</h1>
+
+    <button class="btn btn-primary mb-5" id="walletconnect">
+      CONNECT WALLET
+    </button>
+
+    <div id="walletaddress"></div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3">
+            <h4 class="my-0 fw-normal">Swap</h4>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="floatingInput" placeholder="" />
+                <label for="floatingInput"><i class="fab fa-ethereum me-2"></i>ETH</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="number" class="form-control" id="daza" placeholder="" />
+                <label for="floatingInput"><i class="fas fa-database me-2"></i> DAZA</label>
+              </div>
+
+              <button class="w-25 btn btn-sm btn-primary" type="submit">
+                Swap
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-4">
+            <div>
+              Network:
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div>
+              Balance:
+            </div>
+          </div>
+          <div class="col-md-4">
+            Address:
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-4 rounded-3 shadow-sm">
+          <div class="card-header py-3">
+            <h4 class="my-0 fw-normal">Add Liquidity</h4>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="form-floating mb-3">
+                <div class="row">
+                  <div class="col-md-6">
+                    <select class="form-select form-select-md mb-3" aria-label=".form-select-md example">
+                      <option selected>Select Token</option>
+                      <option value="eth">&#xf42e; ETH</option>
+                      <option value="daza">&#xf1c0; DAZA</option>
+                    </select>
+                  </div>
+                </div>
+                <label for="floatingPassword"> </label>
+                <input type="number" class="form-control" id="floatingNumber" placeholder="" />
+              </div>
+
+              <button class="w-25 btn btn-sm btn-primary" type="submit">
+                Add
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
