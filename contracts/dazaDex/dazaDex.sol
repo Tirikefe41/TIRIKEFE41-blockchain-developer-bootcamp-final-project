@@ -14,6 +14,7 @@ contract dazaDex {
     Daza = IERC20(token_addr);
   }
 
+  
   //Track total Exchange Liquidity and also Liquidity per exchange Addresses.
   uint256 public reserveLiquidity;
   mapping(address => uint256) public _addressLiquidity;
@@ -21,18 +22,31 @@ contract dazaDex {
   uint256 public ETHEq;
 
   // Add events...
-  event DexCreated(address myDex, uint256 createdLiquidity);
-  event PricingParams(uint256 amt);
-  event SwaptoEth(uint256 amount,uint256 swapAmt, uint256 reserve, uint256 target, uint256 dbal);
+  event DexCreated(address , uint256 );
+  event PricingParams(uint256 );
+  event SwaptoEth(uint256 ,uint256 , uint256 , uint256 , uint256 );
   // event SwaptoDaza();
-  event liquidityPlus(uint256 minted);
+  event liquidityPlus(uint256 );
   // event liquidityMinus();
+  event Received(address, uint);
 
   //Modifier to ensure swaps are within trading balances
+  // modifier checkLimit(uint256 Damt,address _address) {
+  //   require(msg.sender == _address);
+  //   require( Damt > Daza.balanceOf(_address));
+  //   _;
+  
+  fallback () external payable {
+    revert();
+  }
+
+  receive () external payable {
+    emit Received(msg.sender, msg.value);
+  }
   
   // function initializes the Dex and sends some tokens to its LiquidityPool.
   function createDex(uint256 _tokens) public payable returns(uint256){
-    require(reserveLiquidity == 0, "Daza already initialized with Liquidity...");
+    require(reserveLiquidity == 0, "DazaDex already initialized with Liquidity...");
     reserveLiquidity = address(this).balance;
 
     _addressLiquidity[msg.sender] = reserveLiquidity;
@@ -55,10 +69,11 @@ contract dazaDex {
     return (taxedPrice*10**18).div(_base);
   }
 
-  //
+
   function ETHtoDAZA(uint256 _daza) public returns (uint256){
-    uint256 dazaAvail = Daza.balanceOf(address(this));
+    uint256 dazaAvail = Daza.balanceOf(address(this));    
     ETHEq = dexPricing(_daza, dazaAvail, address(this).balance);
+    require(dazaAvail >= _daza);
     payable(msg.sender).transfer(ETHEq);
     require(Daza.transferFrom(msg.sender, address(this), _daza));
     emit SwaptoEth(ETHEq, _daza, dazaAvail, address(this).balance, Daza.balanceOf(address(this)));
@@ -72,6 +87,7 @@ contract dazaDex {
 
   function DAZAtoETH() public payable returns(uint256){
     uint256 dazaBal = Daza.balanceOf(address(this));
+    require(address(this).balance.sub(msg.value) >= msg.value);
     uint256 dazaEq = dexPricing(msg.value, address(this).balance.sub(msg.value), dazaBal);
     require(Daza.transfer(msg.sender, dazaEq));
 
@@ -90,7 +106,7 @@ contract dazaDex {
 
     uint256 liqCreated = msg.value.mul(reserveLiquidity)/ethBal;
     _addressLiquidity[msg.sender] += liqCreated;
-     reserveLiquidity += liqCreated;
+    reserveLiquidity += liqCreated;
 
     emit liquidityPlus(liqCreated);
 

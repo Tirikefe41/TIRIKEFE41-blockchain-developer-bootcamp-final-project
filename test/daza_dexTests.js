@@ -1,18 +1,28 @@
 const dazaDex = artifacts.require("dazaDex");
 const dazaToken = artifacts.require("dazaToken");
 var ethers = require('ethers');
+var parseEther = ethers.utils.parseEther;
 let BN = web3.utils.BN;
 
 contract("dazaDex", function (accounts) {
-  const wallet = accounts[1];
+  const wallet = accounts[4];
 
 
   let instance;
   let tokenStance;
 
   beforeEach(async () => {
-    instance = await dazaDex.deployed();
-    tokenStance = await dazaToken.deployed();
+    tokenStance = await dazaToken.new();
+    instance = await dazaDex.new(tokenStance.address);
+
+    // Send some Daza to wallet
+    await tokenStance.transfer(wallet, parseEther('100'));
+
+    // Approve Daza to be used on the DEX..
+    await tokenStance.approve(instance.address, parseEther('100'));
+    // Initialize DEX with 10 DAZA and 1 ETH
+    await instance.createDex(parseEther('10'), {value:parseEther('1.0')});
+    
   });
 
   describe('DEX initializations...', () => {
@@ -23,11 +33,11 @@ contract("dazaDex", function (accounts) {
   
     it("should have 100 DAZA tokens in WalletBalance.", async function () {
       const balance = new BN(await tokenStance.balanceOf(wallet)).toString();
-      // check to see if 100 DAZA was deposited to accountWallet...
+      // check to see if 900 DAZA was deposited to accountWallet...
       assert.equal(ethers.utils.formatEther(balance), '100.0', "Initial Wallet token not credited");
     });
   
-    it("should have 10 DAZA tokens  in DexBalance.", async function () {
+    it("should have 10 approved DAZA tokens in DexBalance.", async function () {
       const _balance = new BN(await tokenStance.balanceOf(instance.address)).toString();
       // check to see if 10 DAZA was deposited to DEX on creation...
       assert.equal(ethers.utils.formatEther(_balance), '10.0', "Initial exchange token not credited");
@@ -38,6 +48,7 @@ contract("dazaDex", function (accounts) {
 
     it("Should update Contract ETH balance for a DAZA swap ", async function (){
       const _initBal = new BN(await web3.eth.getBalance(instance.address)).toString();
+      // console.log(_initBal)
   
       // Perform Swap
       await instance.ETHtoDAZA(ethers.utils.parseEther('3'));
@@ -55,7 +66,7 @@ contract("dazaDex", function (accounts) {
       const _initDaza = new BN(await tokenStance.balanceOf(instance.address)).toString();
       const swapAmt = 4;
   
-      // Perform Swap
+      // Perform Swap...
       await instance.ETHtoDAZA(ethers.utils.parseEther(swapAmt.toString()));
       
       // Get ETH balance after swap...

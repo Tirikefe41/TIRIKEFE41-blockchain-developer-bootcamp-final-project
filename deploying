@@ -1,0 +1,4 @@
+- Set the deployment account in truffle Config.
+-- Uncomment lines to run tests
+
+-- set your user account in the deployment script
