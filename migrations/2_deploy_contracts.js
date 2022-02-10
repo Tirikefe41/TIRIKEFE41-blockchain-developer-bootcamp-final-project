@@ -1,5 +1,3 @@
-const { ethers } = require("ethers");
-
 var dazaToken = artifacts.require("./dazaDex/dazaToken.sol");
 var dazaDex = artifacts.require("./dazaDex/dazaDex.sol");
 
@@ -7,7 +5,7 @@ var dazaDex = artifacts.require("./dazaDex/dazaDex.sol");
 
 module.exports = async function(deployer, network, accounts) {
 
-    const wallet = "0x36EC89027dF91bed99aD2Ab7C119aEE362AaFF0a";
+    // const wallet = "";
 
     await deployer.deploy(dazaToken);
     const daza = await dazaToken.deployed();

@@ -21,8 +21,7 @@ contract("dazaDex", function (accounts) {
     // Approve Daza to be used on the DEX..
     await tokenStance.approve(instance.address, parseEther('100'));
     // Initialize DEX with 10 DAZA and 1 ETH
-    await instance.createDex(parseEther('10'), {value:parseEther('1.0')});
-    
+    await instance.createDex(parseEther('10'), {value:parseEther('1.0')});    
   });
 
   describe('DEX initializations...', () => {

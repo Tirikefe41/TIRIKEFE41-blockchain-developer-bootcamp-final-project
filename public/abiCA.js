@@ -1,7 +1,7 @@
-export const dazaDEXca = "0x1186c61B358199148E4477a38DeD2121AC5F1aE0"
-export const dazaTokenca = "0x9CDba7725d447Ae002Faeeb69fBD8Af31bCb2744"
+const dazaDEXca = "0x4C87F1BF970AA5D769ED62C0C447f51F8cA118e9"
+const dazaTokenca = "0xdFBbC4e62aD29FBa463aAd18E20E19Eb1Ee08C74"
 
-export const dazaDEXABI = 
+ const dazaDEXABI = 
 [
   {
     "inputs": [
@@ -239,7 +239,7 @@ export const dazaDEXABI =
   }
 ];
 
-export const dazaTokenABI = [
+ const dazaTokenABI =  [
   {
     "inputs": [],
     "stateMutability": "nonpayable",
