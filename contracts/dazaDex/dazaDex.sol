@@ -70,12 +70,12 @@ contract dazaDex {
   }
 
 
-  function ETHtoDAZA(uint256 _daza) public returns (uint256){
+  function DazatoETH(uint256 _daza) public returns (uint256){
     uint256 dazaAvail = Daza.balanceOf(address(this));    
     ETHEq = dexPricing(_daza, dazaAvail, address(this).balance);
-    require(dazaAvail >= _daza);
+    require(dazaAvail >= _daza, "DAZA balance not enough");
     payable(msg.sender).transfer(ETHEq);
-    require(Daza.transferFrom(msg.sender, address(this), _daza));
+    require(Daza.transferFrom(msg.sender, address(this), _daza), "DAZA transfer not executed");
     emit SwaptoEth(ETHEq, _daza, dazaAvail, address(this).balance, Daza.balanceOf(address(this)));
     
     return ETHEq;
@@ -85,7 +85,7 @@ contract dazaDex {
     return ETHEq;
   }
 
-  function DAZAtoETH() public payable returns(uint256){
+  function ETHtoDAZA() public payable returns(uint256){
     uint256 dazaBal = Daza.balanceOf(address(this));
     require(address(this).balance.sub(msg.value) >= msg.value);
     uint256 dazaEq = dexPricing(msg.value, address(this).balance.sub(msg.value), dazaBal);

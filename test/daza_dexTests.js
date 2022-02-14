@@ -50,7 +50,7 @@ contract("dazaDex", function (accounts) {
       // console.log(_initBal)
   
       // Perform Swap
-      await instance.ETHtoDAZA(ethers.utils.parseEther('3'));
+      await instance.DAZAtoETH(ethers.utils.parseEther('3'));
       const dd = ethers.utils.formatEther(new BN(await instance.getDexed()).toString());
       
       // Get ETH balance after swap...instance.address
@@ -66,7 +66,7 @@ contract("dazaDex", function (accounts) {
       const swapAmt = 4;
   
       // Perform Swap...
-      await instance.ETHtoDAZA(ethers.utils.parseEther(swapAmt.toString()));
+      await instance.DAZAtoETH(ethers.utils.parseEther(swapAmt.toString()));
       
       // Get ETH balance after swap...
       const _finalDaza = new BN(await tokenStance.balanceOf(instance.address)).toString();
@@ -74,8 +74,6 @@ contract("dazaDex", function (accounts) {
       assert.equal(_diff, swapAmt, 'Swap results in wrong ETH balance update');
       instance.address
     });
-  
-
   });
 
   describe("Liquidity Provisioning...", ()=> {
