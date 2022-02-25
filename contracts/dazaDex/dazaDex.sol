@@ -3,31 +3,40 @@ pragma solidity >=0.6.0 <0.9.0;
 
 import '@openzeppelin/contracts/utils/math/SafeMath.sol';
 import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/security/Pausable.sol';
 
-contract dazaDex {
+/// @title A mini Decentralized Exchange (DEX)
+/// @author Irikefe C Aniboh
+/// @notice Contract allows you explore DEX functionalities at the most basic level
+/// @dev All function calls are currently implemented without side effects
+contract dazaDex is Pausable {
 
   using SafeMath for uint256;
-
+  address owner;
   IERC20 Daza;
 
+  /// @notice create DEX token instance.
+  /// @param token_addr ERC20 token address.
   constructor(address token_addr) {
     Daza = IERC20(token_addr);
   }
 
   
-  //Track total Exchange Liquidity and also Liquidity per exchange Addresses.
+  /// @notice Track total Exchange Liquidity.
+  /// @dev only tracks ETH liquidity.
   uint256 public reserveLiquidity;
+
+  /// @notice Track total Exchange Liquidity and also Liquidity per exchange Addresses.
   mapping(address => uint256) public _addressLiquidity;
+
 
   uint256 public ETHEq;
 
-  // Add events...
+
   event DexCreated(address , uint256 );
   event PricingParams(uint256 );
   event SwaptoEth(uint256 ,uint256 , uint256 , uint256 , uint256 );
-  // event SwaptoDaza();
   event liquidityPlus(uint256 );
-  // event liquidityMinus();
   event Received(address, uint);
 
   //Modifier to ensure swaps are within trading balances
@@ -35,6 +44,11 @@ contract dazaDex {
   //   require(msg.sender == _address);
   //   require( Damt > Daza.balanceOf(_address));
   //   _;
+
+  modifier onlyOwner() {
+    require(msg.sender == owner);
+    _;
+}
   
   fallback () external payable {
     revert();
@@ -44,9 +58,14 @@ contract dazaDex {
     emit Received(msg.sender, msg.value);
   }
   
-  // function initializes the Dex and sends some tokens to its LiquidityPool.
-  function createDex(uint256 _tokens) public payable returns(uint256){
+ 
+  /// @notice initializes the Dex and sends some tokens to its LiquidityPool.
+  /// @dev deploy contract script makes the call only once.
+  /// @param _tokens Amount of native DAZA tokens to init dex with.
+  /// @return the amount ETH reserve tokens sent to Contract.
+  function createDex(uint256 _tokens) public payable whenNotPaused returns(uint256){
     require(reserveLiquidity == 0, "DazaDex already initialized with Liquidity...");
+    owner = msg.sender;
     reserveLiquidity = address(this).balance;
 
     _addressLiquidity[msg.sender] = reserveLiquidity;
@@ -57,8 +76,13 @@ contract dazaDex {
     return reserveLiquidity;
   }
 
+  /// @notice prices tokens for the DEX
+  /// @param _amount Amount tokens to be priced.
+  /// @param _tokenReserve Reserve amount of paired token
+  /// @param _targetToken Reserve amount of token to be priced
+  /// @return calculated price of paired token
   function dexPricing(uint256 _amount, uint256 _tokenReserve, uint256 _targetToken)
-        public returns(uint256)
+        public whenNotPaused returns(uint256)
   {
     // pricing based on Hyperbolic function x*y=constant
     uint256 interimPrice = (_amount.mul(_targetToken));
@@ -69,8 +93,10 @@ contract dazaDex {
     return (taxedPrice*10**18).div(_base);
   }
 
-
-  function DazatoETH(uint256 _daza) public returns (uint256){
+  /// @notice Swaps DAZA to ETH
+  /// @param _daza Amount tokens to be swap.
+  /// @return ETH equivalent of converted DAZA amount.
+  function DazatoETH(uint256 _daza) public whenNotPaused returns (uint256){
     uint256 dazaAvail = Daza.balanceOf(address(this));    
     ETHEq = dexPricing(_daza, dazaAvail, address(this).balance);
     require(dazaAvail >= _daza, "DAZA balance not enough");
@@ -80,12 +106,17 @@ contract dazaDex {
     
     return ETHEq;
   }
-
+  /// @notice Getter for ETHEq
+  /// @dev was added for test purpose
+  /// @return ETH equivalent of converted DAZA amount.
   function getDexed () public view returns (uint256){
     return ETHEq;
   }
 
-  function ETHtoDAZA() public payable returns(uint256){
+
+  /// @notice Swaps ETH to DAZA
+  /// @return DAZA equivalent of converted ETH amount.
+  function ETHtoDAZA() public payable  whenNotPaused returns(uint256){
     uint256 dazaBal = Daza.balanceOf(address(this));
     require(address(this).balance.sub(msg.value) >= msg.value);
     uint256 dazaEq = dexPricing(msg.value, address(this).balance.sub(msg.value), dazaBal);
@@ -94,8 +125,9 @@ contract dazaDex {
     return dazaEq;
   }
 
-  // Liquidity Provisioning...
-  function addLiquidity() public payable returns (uint256){
+  /// @notice Adds Liquidity in ETH and DAZA to DEX
+  /// @return amount of liquidity created
+  function addLiquidity() public payable whenNotPaused returns (uint256){
     uint256 ethBal = address(this).balance.sub(msg.value);
     uint256 dazaBal = Daza.balanceOf(address(this));
 
@@ -103,28 +135,25 @@ contract dazaDex {
     require(Daza.transferFrom(msg.sender, address(this), _dazaEq));
     // extra restriction to check amount is within approved token limit.
 
-
     uint256 liqCreated = msg.value.mul(reserveLiquidity)/ethBal;
     _addressLiquidity[msg.sender] += liqCreated;
     reserveLiquidity += liqCreated;
-
     emit liquidityPlus(liqCreated);
-
     return liqCreated;
   }
 
-
-  function removeLiquidity(uint256 amt) public returns (uint256, uint256){
+  /// @notice Removes Liquidity in ETH and DAZA from DEX
+  /// @dev only DEX creator can remove liquidity to avoid drain the dex of tokens
+  /// @return amount of liquidity removed
+  function removeLiquidity(uint256 amt) public whenNotPaused onlyOwner returns (uint256, uint256){
     uint256 _dazaBal = Daza.balanceOf(address(this));
     uint256 takeEth = amt.mul(address(this).balance) / reserveLiquidity;
     uint256 takeDaza = amt.mul(_dazaBal) / reserveLiquidity;
-
     _addressLiquidity[msg.sender] -= takeEth;
     reserveLiquidity -= takeEth;
     // address(this).transfer(msg.sender, takeEth);
     payable(msg.sender).transfer(takeEth);
     require(Daza.transfer(msg.sender, takeDaza));
-
     return (takeEth, takeDaza);
   }
 }

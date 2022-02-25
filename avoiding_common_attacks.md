@@ -1,0 +1,2 @@
+- Proper Use of Require, Assert and Revert 
+- Use Modifiers Only for Validation 

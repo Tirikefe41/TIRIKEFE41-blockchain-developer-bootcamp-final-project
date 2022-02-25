@@ -1,8 +1,6 @@
 var dazaToken = artifacts.require("./dazaDex/dazaToken.sol");
 var dazaDex = artifacts.require("./dazaDex/dazaDex.sol");
 
-// var web3 = require('web')
-
 var {toWei} = web3.utils
 
 

@@ -50,7 +50,7 @@ contract("dazaDex", function (accounts) {
       // console.log(_initBal)
   
       // Perform Swap
-      await instance.DAZAtoETH(ethers.utils.parseEther('3'));
+      await instance.DazatoETH(ethers.utils.parseEther('3'));
       const dd = ethers.utils.formatEther(new BN(await instance.getDexed()).toString());
       
       // Get ETH balance after swap...instance.address
@@ -66,7 +66,7 @@ contract("dazaDex", function (accounts) {
       const swapAmt = 4;
   
       // Perform Swap...
-      await instance.DAZAtoETH(ethers.utils.parseEther(swapAmt.toString()));
+      await instance.DazatoETH(ethers.utils.parseEther(swapAmt.toString()));
       
       // Get ETH balance after swap...
       const _finalDaza = new BN(await tokenStance.balanceOf(instance.address)).toString();

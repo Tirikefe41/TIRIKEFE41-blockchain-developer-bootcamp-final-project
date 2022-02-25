@@ -26,4 +26,18 @@
 - User can then experiment with the exchange's swap function where you can swap between DAZA and ETH.
 - User enters swap amount and is debited the swap amount of tokens and credited the swapped token.
 - This action updates the UI with the current exchange's liquidity pool and the native token price based off this.
-- User can also choose to add more liquidity to the pool or remove some liquidity from the exchange's pool
+- User can also choose to add more liquidity to the pool or remove some liquidity from the exchange's pool.
+
+
+## Installation instructions:
+
+### Local blockchain using Ganache:
+
+- Change the "from" address in "2_deploy_contracts.js" to your account of choice before running truffle migrate.
+- Make sure the port on which ganache is running is correct in truffle-config.js, if you are using ganche GUI it should run on 7545.
+
+```bash
+$ cd px-bootcamp
+$ npm install
+$ truffle migrate --reset
+```
