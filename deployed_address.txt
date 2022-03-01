@@ -1,0 +1,4 @@
+ropsten: {
+    dazaToken: "0x6CF5DA7cd89Aaf8Cd7A0aAEe901792d4F96a7DE2",
+    dazaDex: "0xdCcCC32403047b89B75fb2485B38AFf26bA7E655"
+}

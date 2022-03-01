@@ -1,6 +1,8 @@
-const dazaDEXca = "0x06dB6f6F56Ab0322Bcb0Afad89631d89cD0a526e"
-const dazaTokenca = "0xBc21996369eA4957722CE6F5C2883221E83e09eE"
-var deployprivateKey = "0xbd5f5399b33b763620653961003094d840c7a36baef7be4cd70911f9f521244f"
+const dazaTokenca = "0xD99d8464aaE10146801Da92629e01684880Af0cd"
+
+const dazaDEXca = "0x1d1442C7c0431943D1Ae50875f815cF928363727"
+
+var deployprivateKey = "0x0aca38323f2b24e335b8bfd6466649e86cc90cfce64be6476d743379893c588e"
 
  const dazaDEXABI = 
 [

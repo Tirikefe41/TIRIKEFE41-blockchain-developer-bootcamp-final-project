@@ -12,7 +12,7 @@ import '@openzeppelin/contracts/security/Pausable.sol';
 contract dazaDex is Pausable {
 
   using SafeMath for uint256;
-  address owner;
+  address public owner;
   IERC20 Daza;
 
   /// @notice create DEX token instance.
