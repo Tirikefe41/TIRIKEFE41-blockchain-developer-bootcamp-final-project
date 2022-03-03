@@ -90,3 +90,4 @@ $ truffle migrate --reset
 https://youtu.be/ka6acOQTWIw
 
 ## Public Ethereum wallet for certification
+0x1661dc4bc22a97b0a4b94f03cbea4bac76018e5f
